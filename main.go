@@ -8,12 +8,10 @@ func main() {
 
 	engine := &Engine{
 		Position: mouse.GetPosition(),
-
 		Velocity: Vector{
-			X: 1,
-			Y: 1,
+			X: 5.5,
+			Y: 5.5,
 		},
-
 		Width:  width,
 		Height: height,
 	}

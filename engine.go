@@ -11,12 +11,13 @@ func (e *Engine) Update() {
 	nextX := e.Position.X + e.Velocity.X
 	nextY := e.Position.Y + e.Velocity.Y
 
-	if nextX >= e.Width || nextX < 0 {
+	if nextX >= float64(e.Width) || nextX < 0 {
 		e.Velocity.X = -e.Velocity.X
 	}
-	if nextY >= e.Height || nextY < 0 {
+	if nextY >= float64(e.Height) || nextY < 0 {
 		e.Velocity.Y = -e.Velocity.Y
 	}
+
 	e.Position.X += e.Velocity.X
 	e.Position.Y += e.Velocity.Y
 }
