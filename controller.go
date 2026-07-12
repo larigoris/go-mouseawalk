@@ -14,30 +14,22 @@ func (c *Controller) Run() {
 		c.StopChan = make(chan struct{})
 	}
 
-	const sleepInterval = 2 * time.Millisecond
-	const epsilon = 2.0
+	const sleepInterval = 8 * time.Millisecond
+	const epsilon = 6.0
 
 	for {
 		select {
 		case <-c.StopChan:
 			return
 		default:
-			c.Engine.Update()
-
-			pos := c.Engine.Position
-			before := c.MouseTracker.GetPosition()
-			c.MouseController.Move(&pos)
-
-			for i := 0; i < 20; i++ {
-				realPos := c.MouseTracker.GetPosition()
-				if closeEnough(pos, realPos, epsilon) {
-					break
-				}
-				if !closeEnough(before, realPos, epsilon) && !closeEnough(pos, realPos, epsilon) {
-					return
-				}
-				time.Sleep(sleepInterval)
+			currentPos := c.MouseController.GetPosition()
+			if !closeEnough(currentPos, c.Engine.Position, epsilon) {
+				return
 			}
+
+			c.Engine.Update()
+			pos := c.Engine.Position
+			c.MouseController.Move(&pos)
 
 			time.Sleep(sleepInterval)
 		}
