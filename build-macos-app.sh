@@ -24,6 +24,7 @@ BUNDLE_PATH="$OUTPUT_DIR/$APP_NAME.app"
 MACOS_DIR="$BUNDLE_PATH/Contents/MacOS"
 RESOURCES_DIR="$BUNDLE_PATH/Contents/Resources"
 PLIST_PATH="$BUNDLE_PATH/Contents/Info.plist"
+BUILD_DIR="$ROOT_DIR/build"
 
 rm -rf "$BUNDLE_PATH"
 mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
@@ -54,7 +55,7 @@ elif [[ -f "$ICONS_DIR/icon.png" ]]; then
 fi
 
 echo "Building $APP_NAME for darwin/$GOARCH_VALUE..."
-CGO_ENABLED=1 GOOS=darwin GOARCH="$GOARCH_VALUE" go build -trimpath -ldflags='-s -w' -o "$MACOS_DIR/$APP_NAME" .
+CGO_ENABLED=1 GOOS=darwin GOARCH="$GOARCH_VALUE" go build -trimpath -ldflags='-s -w' -o "$MACOS_DIR/$APP_NAME" ./cmd
 
 cat > "$PLIST_PATH" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -91,4 +92,10 @@ fi
 
 chmod +x "$MACOS_DIR/$APP_NAME"
 
+# Also place a standalone binary in the build/ directory
+mkdir -p "$BUILD_DIR"
+cp "$MACOS_DIR/$APP_NAME" "$BUILD_DIR/$APP_NAME"
+chmod +x "$BUILD_DIR/$APP_NAME"
+
 echo "Built app bundle: $BUNDLE_PATH"
+echo "Standalone binary: $BUILD_DIR/$APP_NAME"
