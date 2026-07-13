@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 APP_NAME="${1:-GOwalk}"
 OUTPUT_DIR="${2:-$ROOT_DIR/dist}"
 TARGET_ARCH="${GOARCH:-$(uname -m)}"
