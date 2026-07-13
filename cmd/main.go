@@ -1,14 +1,18 @@
 package main
 
-import "github.com/go-vgo/robotgo"
+import (
+	"GOwalk/internal/app"
+
+	"github.com/go-vgo/robotgo"
+)
 
 func main() {
 	width, height := robotgo.GetScreenSize()
-	mouse := &MouseController{}
+	mouse := &app.MouseController{}
 
-	engine := &Engine{
+	engine := &app.Engine{
 		Position: mouse.GetPosition(),
-		Velocity: Vector{
+		Velocity: app.Vector{
 			X: 5.5,
 			Y: 5.5,
 		},
@@ -16,10 +20,10 @@ func main() {
 		Height: height,
 	}
 
-	tracker := &MouseTracker{}
+	tracker := &app.MouseTracker{}
 	tracker.Start()
 
-	controller := &Controller{
+	controller := &app.Controller{
 		Engine:          engine,
 		MouseController: mouse,
 		MouseTracker:    tracker,

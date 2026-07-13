@@ -1,6 +1,3 @@
-package main
+package moved
 
-type Vector struct {
-	X float64
-	Y float64
-}
+// Vector перемещён в internal/app. Этот файл оставлен как заглушка.
