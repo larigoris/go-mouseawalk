@@ -47,3 +47,5 @@ coverage.html
 
 tmp/
 temp/
+
+**/.DS_Store
