@@ -24,6 +24,7 @@ BUNDLE_PATH="$OUTPUT_DIR/$APP_NAME.app"
 MACOS_DIR="$BUNDLE_PATH/Contents/MacOS"
 RESOURCES_DIR="$BUNDLE_PATH/Contents/Resources"
 PLIST_PATH="$BUNDLE_PATH/Contents/Info.plist"
+BUILD_DIR="$ROOT_DIR/build"
 
 rm -rf "$BUNDLE_PATH"
 mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
@@ -91,4 +92,10 @@ fi
 
 chmod +x "$MACOS_DIR/$APP_NAME"
 
+# Also place a standalone binary in the build/ directory
+mkdir -p "$BUILD_DIR"
+cp "$MACOS_DIR/$APP_NAME" "$BUILD_DIR/$APP_NAME"
+chmod +x "$BUILD_DIR/$APP_NAME"
+
 echo "Built app bundle: $BUNDLE_PATH"
+echo "Standalone binary: $BUILD_DIR/$APP_NAME"
