@@ -54,7 +54,7 @@ elif [[ -f "$ICONS_DIR/icon.png" ]]; then
 fi
 
 echo "Building $APP_NAME for darwin/$GOARCH_VALUE..."
-CGO_ENABLED=1 GOOS=darwin GOARCH="$GOARCH_VALUE" go build -trimpath -ldflags='-s -w' -o "$MACOS_DIR/$APP_NAME" .
+CGO_ENABLED=1 GOOS=darwin GOARCH="$GOARCH_VALUE" go build -trimpath -ldflags='-s -w' -o "$MACOS_DIR/$APP_NAME" ./cmd
 
 cat > "$PLIST_PATH" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
