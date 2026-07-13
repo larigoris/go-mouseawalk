@@ -2,14 +2,14 @@ package app
 
 import "time"
 
-type Controller struct {
+type Service struct {
 	Engine          *Engine
 	MouseController *MouseController
 	MouseTracker    *MouseTracker
 	StopChan        chan struct{}
 }
 
-func (c *Controller) Run() {
+func (c *Service) Run() {
 	if c.StopChan == nil {
 		c.StopChan = make(chan struct{})
 	}

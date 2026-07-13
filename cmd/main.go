@@ -23,7 +23,7 @@ func main() {
 	tracker := &app.MouseTracker{}
 	tracker.Start()
 
-	controller := &app.Controller{
+	controller := &app.Service{
 		Engine:          engine,
 		MouseController: mouse,
 		MouseTracker:    tracker,
