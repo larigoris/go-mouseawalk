@@ -49,5 +49,5 @@ jobs:
             libxcursor-dev \
             libxkbcommon-dev
 
-          - name: Build
-            run: go build -v ./cmd/mousewalk
+      - name: Build
+        run: go build -v ./cmd/mousewalk
