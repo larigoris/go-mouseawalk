@@ -48,7 +48,8 @@ jobs:
             libxrandr-dev \
             libxi-dev \
             libxcursor-dev \
-            libxkbcommon-dev
+            libxkbcommon-dev \
+            libxkbcommon-x11-dev
 
       - name: Build
         run: go build -v ./cmd/mousewalk
