@@ -35,5 +35,20 @@ jobs:
           cache: true
 
       - run: go mod download
-      - name: Build
-        run: go build -v ./cmd/mousewalk
+      
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libx11-dev \
+            libxtst-dev \
+            libxinerama-dev \
+            libxrandr-dev \
+            libxi-dev \
+            libxcursor-dev \
+            libxkbcommon-dev
+
+            - name: Build
+            
+              run: go build -v ./cmd/mousewalk
