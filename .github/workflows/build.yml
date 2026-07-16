@@ -39,6 +39,7 @@ jobs:
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
+          # Required by robotgo/gohook on Linux
           sudo apt-get update
           sudo apt-get install -y \
             libx11-dev \

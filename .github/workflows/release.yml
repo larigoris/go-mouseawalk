@@ -1,0 +1,120 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  PRODUCT_NAME: MouseWalk
+  CMD_PATH: ./cmd/mousewalk
+
+jobs:
+  release:
+    name: Build ${{ matrix.goos }}-${{ matrix.goarch }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux
+          - os: ubuntu-latest
+            goos: linux
+            goarch: amd64
+            archive: tar.gz
+            binary_ext: ""
+
+          # Windows
+          - os: windows-latest
+            goos: windows
+            goarch: amd64
+            archive: zip
+            binary_ext: ".exe"
+
+          # macOS Apple Silicon
+          - os: macos-latest
+            goos: darwin
+            goarch: arm64
+            archive: tar.gz
+            binary_ext: ""
+
+          # macOS Intel
+          - os: macos-13
+            goos: darwin
+            goarch: amd64
+            archive: tar.gz
+            binary_ext: ""
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Download Go modules
+        run: go mod download
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+
+          # Required by robotgo / gohook
+          sudo apt-get install -y \
+            libx11-dev \
+            libx11-xcb-dev \
+            libxtst-dev \
+            libxinerama-dev \
+            libxrandr-dev \
+            libxi-dev \
+            libxcursor-dev \
+            libxkbcommon-dev \
+            libxkbcommon-x11-dev
+
+      - name: Build
+        shell: bash
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          mkdir -p dist
+
+          go build \
+            -trimpath \
+            -ldflags="-s -w" \
+            -o "dist/${PRODUCT_NAME}${{ matrix.binary_ext }}" \
+            ${CMD_PATH}
+
+      - name: Archive (Linux/macOS)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          cd dist
+          tar -czf "${PRODUCT_NAME}-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz" "${PRODUCT_NAME}"
+
+      - name: Archive (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Compress-Archive `
+            -Path "dist/${env:PRODUCT_NAME}.exe" `
+            -DestinationPath "dist/${env:PRODUCT_NAME}-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}.zip"
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            dist/*.zip
+            dist/*.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
