@@ -15,7 +15,7 @@ func (c *Service) Run() {
 	}
 
 	const sleepInterval = 8 * time.Millisecond
-	const epsilon = 6.0
+	const epsilon = 8.0
 
 	for {
 		select {
